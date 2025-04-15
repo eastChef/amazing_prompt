@@ -1,0 +1,62 @@
+{
+     'model': 'qwen-plus',
+     'messages': [{
+          'role': 'system',
+          'content': 'You are a planning assistant. Create a concise, actionable plan with clear steps. Focus on key milestones rather than detailed sub-steps. Optimize for clarity and efficiency.'
+     }, {
+          'role': 'user',
+          'content': 'Create a reasonable plan with clear steps to accomplish the task: 收集A热门新闻'
+     }],
+     'tools': [{
+          'type': 'function',
+          'function': {
+               'name': 'planning',
+               'description': '\nA planning tool that allows the agent to create and manage plans for solving complex tasks.\nThe tool provides functionality for creating plans, updating plan steps, and tracking progress.\n',
+               'parameters': {
+                    'type': 'object',
+                    'properties': {
+                         'command': {
+                              'description': 'The command to execute. Available commands: create, update, list, get, set_active, mark_step, delete.',
+                              'enum': ['create', 'update', 'list', 'get', 'set_active', 'mark_step', 'delete'],
+                              'type': 'string'
+                         },
+                         'plan_id': {
+                              'description': 'Unique identifier for the plan. Required for create, update, set_active, and delete commands. Optional for get and mark_step (uses active plan if not specified).',
+                              'type': 'string'
+                         },
+                         'title': {
+                              'description': 'Title for the plan. Required for create command, optional for update command.',
+                              'type': 'string'
+                         },
+                         'steps': {
+                              'description': 'List of plan steps. Required for create command, optional for update command.',
+                              'type': 'array',
+                              'items': {
+                                   'type': 'string'
+                              }
+                         },
+                         'step_index': {
+                              'description': 'Index of the step to update (0-based). Required for mark_step command.',
+                              'type': 'integer'
+                         },
+                         'step_status': {
+                              'description': 'Status to set for a step. Used with mark_step command.',
+                              'enum': ['not_started', 'in_progress', 'completed', 'blocked'],
+                              'type': 'string'
+                         },
+                         'step_notes': {
+                              'description': 'Additional notes for a step. Optional for mark_step command.',
+                              'type': 'string'
+                         }
+                    },
+                    'required': ['command'],
+                    'additionalProperties': False
+               }
+          }
+     }],
+     'tool_choice': < ToolChoice.AUTO: 'auto' > ,
+     'timeout': 300,
+     'max_tokens': 8192,
+     'temperature': 0.0,
+     'stream': False
+}
